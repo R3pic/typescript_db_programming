@@ -52,7 +52,7 @@ export class CLI {
                 console.info(getMessage(result));
             } catch (error) {
                 if (error instanceof DatabaseError)
-                    console.error("데이터베이스 에러");
+                    console.error("데이터베이스 에러", error);
                 else
                     console.error("예상하지 못한 에러.", error);
             }
