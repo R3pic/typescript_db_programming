@@ -1,0 +1,15 @@
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres:latest
+    restart: always
+    ports:
+      - ${POSTGRES_PORT}:5432
+    environment:
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    volumes:
+      # - ${CONF_DIR}:/etc/postgresql
+      - ${DATA_DIR}:/var/lib/postgresql/data
+      - ${INIT_DIR}:/docker-entrypoint-initdb.d
+    env_file:
+      - .env
