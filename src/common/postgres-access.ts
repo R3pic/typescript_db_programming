@@ -1,15 +1,16 @@
 import { Client } from "pg";
-
-const DATABASE = Bun.env.DATABASE || "exercise";
+import {env} from "@common/env.ts";
 
 export const setConnection = async () => {
-    const client = new Client({
+    const clientOptions = {
         host: "localhost",
-        port: 15432,
-        user: "yehwan",
-        password: "dpghks",
-        database: DATABASE,
-    });
+        port: env.get<number>('POSTGRES_PORT'),
+        user: env.get('DB_USER'),
+        password: env.get('DB_PASSWORD'),
+        database: env.get('POSTGRES_DB'),
+    }
+
+    const client = new Client(clientOptions);
 
     await client.connect();
     return client;
