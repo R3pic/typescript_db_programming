@@ -74,8 +74,8 @@ class AppInit {
             console.info(`${result}건이 등록되었습니다.`);
             console.info();
 
-            console.log("08. 학번 20110402인 학생의 생일을 1990-03-21로 변경합니다.");
-            result = await studentService.updateStudent(new Student("20110401", '', new Date("1990-03-21")));
+            console.log("08. 학번 20110402인 학생의 생일을 1990-03-25로 변경합니다.");
+            result = await studentService.updateStudent(new Student("20110401", '', new Date("1990-03-25")));
             console.info(`${result}건이 변경되었습니다.`);
             console.info();
 
