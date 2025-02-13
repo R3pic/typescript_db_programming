@@ -1,5 +1,7 @@
 \c entertainment
 
+SET ROLE yehwan;
+
 -- 부서 생성
 CREATE TABLE IF NOT EXISTS department (
                                           DEPT_CODE VARCHAR(4)  NOT NULL PRIMARY KEY,

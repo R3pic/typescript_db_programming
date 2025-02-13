@@ -1,5 +1,7 @@
 \c exercise
 
+SET ROLE yehwan;
+
 CREATE TABLE student (
     no          VARCHAR(8) NOT NULL PRIMARY KEY,
     name        VARCHAR(4) NOT NULL,
