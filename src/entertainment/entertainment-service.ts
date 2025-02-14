@@ -11,13 +11,13 @@ export interface EntertainmentService {
     getDepartments(): Promise<Department[]>;
     getEmployees(): Promise<Employee[]>;
     getDramas(): Promise<DramaCodeAndName[]>;
-    getDramasByKBCOrSBC(): Promise<Drama[]>;
+    getDramasByBroadcasts(broadcasts: string[]): Promise<Drama[]>;
     getDramaBroadcasts(): Promise<string[]>;
     getEmployeeSalarySumAndAvg(): Promise<{ sum: number, avg: number }>
     getDramasbyNotOpen(): Promise<string[]>;
     getAllEmployeeNameAndManagerName(): Promise<EmployeeNameAndManager[]>;
     getAllEmployeeNameAndSalary(): Promise<EmployeeNameAndSalary[]>;
-    getEmployeesSalaryDataByRoleFromSalaryAvg(threshold: number): Promise<{ emp_name: string, avg: number, max: number, min: number }[]>;
+    getEmployeesSalaryDataByRoleFromSalaryAvg(threshold: number): Promise<{ emp_rcode: string, avg: number, max: number, min: number }[]>;
     getEmployeesByHigherThanAvgSalary(): Promise<EmployeeNameAndSalary[]>;
     updateDramaOpenDateIfNull(date: string): Promise<number>;
     updateEmployeeRoleAndSalary(code: string, roleName: EmployeeRole, salaryPercentage: number): Promise<number>;

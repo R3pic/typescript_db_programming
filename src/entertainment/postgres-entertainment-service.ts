@@ -54,12 +54,12 @@ export class PostgresEntertainmentService implements EntertainmentService{
         }
     }
 
-    async getDramasByKBCOrSBC(): Promise<Drama[]> {
-        const query = "SELECT DRM_CODE, DRM_NAME, DRM_PRD, DRM_BRD FROM drama WHERE DRM_BRD = 'KBC' OR DRM_BRD = 'SBC'";
+    async getDramasByBroadcasts(broadcasts: string[]): Promise<Drama[]> {
+        const query = "SELECT DRM_CODE, DRM_NAME FROM drama WHERE DRM_BRD = ANY ($1)";
         const client = await setConnection();
 
         try {
-            const result = await client.query(query);
+            const result = await client.query(query, [broadcasts]);
             return result.rows;
         } catch (error) {
             console.error("Error executing query", (error as Error).message);
@@ -149,10 +149,10 @@ export class PostgresEntertainmentService implements EntertainmentService{
     }
 
     async getEmployeesSalaryDataByRoleFromSalaryAvg(threshold: number): Promise<{
-        emp_name: string;
+        emp_rcode: string;
         avg: number;
         max: number;
-        min: number
+        min: number;
     }[]> {
         // const query = 'SELECT EMP_RCODE, avg, min, max ' +
         //                     'FROM (SELECT EMP_RCODE, avg(EMP_SAL) AS avg, min(EMP_SAL) AS min, max(EMP_SAL) AS max FROM employee ' +
@@ -247,9 +247,8 @@ export class PostgresEntertainmentService implements EntertainmentService{
         }
     }
 
-    async insertEmployee(employee: Employee, departmentCode?: string): Promise<number> {
+    async insertEmployee(employee: Employee): Promise<number> {
         const query = 'INSERT INTO employee (EMP_CODE, EMP_NAME, EMP_MGT, EMP_SAL, EMP_RCODE) VALUES ($1, $2, $3, $4, $5)';
-        const rel_query = 'INSERT INTO rel_employee (RD_EMP_CODE, RD_DEPT_CODE) VALUES ($1, $2)'
         const client = await setConnection();
 
         try {
@@ -262,12 +261,6 @@ export class PostgresEntertainmentService implements EntertainmentService{
                 employee.emp_sal,
                 employee.emp_rcode,
             ]);
-            resultCount += result.rowCount || 0;
-            if (departmentCode)
-                result = await client.query(rel_query, [
-                    employee.emp_code,
-                    departmentCode
-                ]);
             resultCount += result.rowCount || 0;
             await client.query("COMMIT");
             return resultCount;

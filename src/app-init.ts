@@ -142,7 +142,7 @@ class AppInit {
             console.info();
 
             console.info('Quiz 04. 드라마 방영사가 KBC이거나 SBC인 드라마를 검색하시오');
-            result = await service.getDramasByKBCOrSBC();
+            result = await service.getDramasByBroadcasts(['KBC', 'SBC']);
             console.info(result);
             console.info();
 
