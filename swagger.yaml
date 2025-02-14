@@ -1,0 +1,413 @@
+openapi: 3.0.1
+info:
+  title: Entertainment API
+  description: for Entertainment API
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000'
+tags:
+  - name: Department
+    description: 부서
+  - name: Employee
+    description: 관계자
+  - name: Drama
+    description: 드라마
+paths:
+  /entertainments/departments:
+    get:
+      tags:
+        - Department
+      summary: 모든 부서 목록
+      description: 모든 부서 목록을 가져옵니다.
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Department'
+  /entertainments/employees:
+    get:
+      tags:
+        - Employee
+      summary: 모든 관계자 목록
+      description: 모든 관계자 목록을 가져옵니다.
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+    post:
+      tags:
+        - Employee
+      summary: 새로운 관계자를 추가
+      description: 새로운 관계자를 추가합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEmployeeDto'
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 추가된 행의 갯수
+                    example: 1개의 행이 추가되었습니다.
+    delete:
+      tags:
+        - Employee
+      summary: 관계자 삭제.
+      description: 관계자를 삭제합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emp_code:
+                  type: string
+                  description: 삭제할 관계자의 코드
+                  example: E903
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 업데이트된 행의 갯수
+                    example: 1개의 행이 삭제되었습니다.
+  /entertainments/dramas:
+    get:
+      tags:
+        - Drama
+      summary: 모든 드라마 목록
+      description: 모든 드라마 목록을 가져옵니다.
+      parameters:
+        - in: query
+          name: broadcasts
+          schema:
+            type: string
+          description: 방영사가 다수일 경우 ,로 구분하여 작성한다.
+          example: 'KBC,SBC'
+          required: false
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Drama'
+  /entertainments/dramas/broadcasts:
+    get:
+      tags:
+        - Drama
+      summary: 모든 드라마 방영사
+      description: 모든 드라마 방영사 목록을 가져옵니다.
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: KBC
+  /entertainments/employees/salaries/stats:
+    get:
+      tags:
+        - Employee
+      summary: 모든 관계자의 급여 총합 / 평균
+      description: 모든 관계자의 급여 총합 / 평균을 반환합니다.
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sum:
+                    type: number
+                    description: 급여 합계
+                    example: 1000
+                  avg:
+                    type: number
+                    description: 급여 평균
+                    example: 500
+  /entertainments/dramas/not-open:
+    get:
+      tags:
+        - Drama
+      summary: 방영되지 않은 드라마 목록
+      description: 방영되지 않은 드라마 목록을 가져옵니다.
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  description: 드라마 이름
+                  example: '수의사'
+    patch:
+      tags:
+        - Drama
+      summary: 방영일자가 정해지지 않은 드라마의 방영일자
+      description: 방영일자가 정해지지 않은 드라마의 방영일자를 업데이트합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                open_date:
+                  type: string
+                  description: 수정할 방영일자
+                  example: '2013-05-01'
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 업데이트된 행의 갯수
+                    example: 1개의 행이 업데이트되었습니다.
+  /entertainments/employees/managers:
+    get:
+      tags:
+        - Employee
+      summary: 모든 관계자 이름과 상사의 이름
+      description: 모든 관계자 이름과 상사의 이름을 반환합니다.
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    emp_name:
+                      type: string
+                      description: 관계자 이름
+                    mgt_name:
+                      type: string
+                      description: 관계자 상사 이름
+  /entertainments/employees/salaries:
+    get:
+      tags:
+        - Employee
+      summary: 관계자의 이름과 급여
+      description: 관계자의 이름과 급여를 가져옵니다.
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    emp_name:
+                      type: string
+                      description: 관계자 이름
+                      example: 홍길동
+                    emp_sal:
+                      type: number
+                      description: 관계자 급여
+                      example: 5000
+  /entertainments/employees/roles/salaries/stats:
+    get:
+      tags:
+        - Employee
+      summary: 특정 급여 이상 받는 직급
+      description: 특정 급여 이상 급여 받는 직급을 반환합니다.
+      parameters:
+        - in: query
+          name: filter
+          schema:
+            type: number
+          description: 일정 급여 이상
+          example: 5000
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    emp_rcode:
+                      type: string
+                      description: 직급 코드
+                      example: R001
+                    avg:
+                      type: number
+                      description: 급여 평균
+                      example: 5000
+                    max:
+                      type: number
+                      description: 최고 급여
+                      example: 5000
+                    min:
+                      type: number
+                      description: 최소 급여
+                      example: 5000
+  /entertainments/employees/salaries/above-average:
+    get:
+      tags:
+        - Employee
+      summary: 평균 급여 이상 받는 관계자목록
+      description: 평균 급여 이상 받는 관계자 목록을 반환합니다.
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    emp_name:
+                      type: string
+                      description: 관계자 이름
+                      example: 홍길동
+                    emp_sal:
+                      type: number
+                      description: 관계자 급여
+                      example: 5000
+  /entertainments/employees/{id}/promotion:
+    patch:
+      tags:
+        - Drama
+      summary: 직급과 급여 상승
+      description: 관계자의 직급과 급여를 상승시킵니다.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 관계자 코드
+          example: 'E203'
+      requestBody:
+        description: 어떤 직급으로 승진할지, 급여의 상승 퍼센테이지
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role_name:
+                  type: string
+                  description: 직급 이름
+                  example: 실장
+                percentage:
+                  type: number
+                  description: 급여 인상률 (0~100)
+                  example: 20
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 업데이트된 행의 갯수
+                    example: 1개의 행이 업데이트되었습니다.
+
+components:
+  schemas:
+    Department:
+      type: object
+      properties:
+        dept_code:
+          type: string
+          description: 부서 코드
+          example: D001
+        dept_name:
+          type: string
+          description: 부서 이름
+          example: 부서이름
+        dept_loc:
+          type: string
+          description: 부서 위치
+          example: 서울특별시
+    Employee:
+      type: object
+      properties:
+        emp_code:
+          type: string
+          description: 관계자 코드
+          example: E903
+        emp_name:
+          type: string
+          description: 관계자 이름
+          example: 손진현
+        emp_mgt:
+          type: string
+          description: 관계자 상사 코드
+          example: E901
+        emp_sal:
+          type: int
+          description: 급여
+          example: 4000
+    CreateEmployeeDto:
+      allOf:
+        - $ref: '#/components/schemas/Employee'
+        - type: object
+          required:
+            - emp_code
+            - emp_name
+            - emp_mgt
+            - emp_sal
+            - emp_rcode
+          properties:
+            emp_rcode:
+              type: string
+              description: 직급 코드
+              example: R001
+    Drama:
+      type: object
+      properties:
+        drm_code:
+          type: string
+          description: 드라마 코드
+          example: D001
+        drm_name:
+          type: string
+          description: 드라마 이름
+          example: 드라마 이름
