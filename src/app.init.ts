@@ -15,5 +15,6 @@ app.use('/students', studentController);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.listen(port, () => {
-    console.info(`서버가 http:/localhost:${port}에서 실행중입니다.`);
+    console.info(`서버가 http://localhost:${port}에서 실행중입니다.`);
+    console.info(`swagger : http://localhost:${port}/api-docs`);
 })
