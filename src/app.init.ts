@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import studentController from "@student/student.controller.ts";
 import entertainmentController from "@/entertainment/entertainment.controller.ts";
@@ -8,6 +9,7 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 app.use('/entertainments', entertainmentController);
 app.use('/students', studentController);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
